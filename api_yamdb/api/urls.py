@@ -4,7 +4,15 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
+from .views import CategoryViewSet, GenreViewSet, TitleViewSet
+
 router = DefaultRouter()
+router.register('titles', TitleViewSet)
+router.register('genres', GenreViewSet)
+router.register('categories', CategoryViewSet)
+#router.register(
+#    r"^titles\/(?P<id>\d+)\/reviews", ReviewViewSet, basename="reviews"
+#)
 
 urlpatterns = [
     
