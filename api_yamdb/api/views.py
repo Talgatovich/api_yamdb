@@ -1,8 +1,8 @@
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from titles.models import Category, Genre, Title
 
-from titles.models import Title, Genre, Category
-#from .permissions import 
+#from .permissions import
 from .serializers import (TitleReadSerializer, TitleWriteSerializer, GenreSerializer,
                           CategorySerializer)
 
@@ -11,7 +11,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     #permission_classes = админ на запись, остальные чтение
     pagination_class = LimitOffsetPagination
-
+    
     def get_serializer_class(self):
         # Если запрошенное действие (action) — получение списка объектов ('list')
         # 'retrieve' - получение одного объекта
@@ -20,7 +20,7 @@ class TitleViewSet(viewsets.ModelViewSet):
             return TitleReadSerializer
         # А если запрошенное действие — не 'list', 'retrieve'
         # применяем TitleWhiteSerializer
-        return TitleWriteSerializer 
+        return TitleWriteSerializer
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
