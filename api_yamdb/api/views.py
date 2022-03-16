@@ -3,7 +3,7 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from titles.models import Title, Genre, Category
 #from .permissions import 
-from .serializers import (TitleReadSerializer, TitleWhiteSerializer, GenreSerializer,
+from .serializers import (TitleReadSerializer, TitleWriteSerializer, GenreSerializer,
                           CategorySerializer)
 
 
@@ -20,16 +20,18 @@ class TitleViewSet(viewsets.ModelViewSet):
             return TitleReadSerializer
         # А если запрошенное действие — не 'list', 'retrieve'
         # применяем TitleWhiteSerializer
-        return TitleWhiteSerializer 
+        return TitleWriteSerializer 
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     #permission_classes = админ на запись, остальные чтение
+    pagination_class = LimitOffsetPagination
 
 
 class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     #permission_classes = админ на запись, остальные чтение
+    pagination_class = LimitOffsetPagination
