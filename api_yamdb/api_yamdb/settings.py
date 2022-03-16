@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
-    'titles.apps.TitlesCatGenConfig',
+    #'titles.apps.TitlesCatGenConfig',
+    'titles',
 ]
 
 MIDDLEWARE = [
