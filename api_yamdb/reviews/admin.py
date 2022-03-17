@@ -5,6 +5,7 @@ from .models import Comment, Review
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
+    """Отзывовы в админке"""
     list_display = (
         'title',
         'text',
@@ -17,6 +18,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    """Комментарии в админке"""
     list_display = (
         'review',
         'text',
