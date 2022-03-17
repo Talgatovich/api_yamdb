@@ -22,8 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api',
+    'rest_framework.authtoken',
+    'users.apps.UsersConfig',
+    'api.apps.ApiConfig',
+    #'titles.apps.TitlesCatGenConfig',
+    'titles',
     'reviews',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -104,5 +109,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
+<<<<<<< HEAD
  
 AUTH_USER_MODEL = 'reviews.User'
+=======
+
+AUTH_USER_MODEL = 'users.User' 
+
+REST_FRAMEWORK = {
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+   
+}
+>>>>>>> 11b2a857f06141ac901b9a929bbaa8ffb0107c7b
