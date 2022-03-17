@@ -3,15 +3,15 @@ from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from titles.models import Category, Genre, Title
 from rest_framework import viewsets
-
-
-#from .permissions import 
-from .permissions import (AdminModeratorAuthorPermission,)
+from rest_framework import filters, permissions, viewsets
+from rest_framework.pagination import LimitOffsetPagination
+from titles.models import Category, Genre, Title
 from reviews.models import Review
-from .serializers import (CategorySerializer, GenreSerializer,
-                          TitleReadSerializer, TitleWhiteSerializer,
-                          CommentSerializer, ReviewSerializer,
-                          )
+from .permissions import (AdminModeratorAuthorPermission,)
+#from .permissions import 
+from .serializers import (CategorySerializer, GenreSerializer, CommentSerializer, ReviewSerializer,
+                          TitleReadSerializer, TitleWhiteSerializer)
+
 
 
 class TitleViewSet(viewsets.ModelViewSet):

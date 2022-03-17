@@ -109,10 +109,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
-<<<<<<< HEAD
+
  
-AUTH_USER_MODEL = 'reviews.User'
-=======
+
 
 AUTH_USER_MODEL = 'users.User' 
 
@@ -124,4 +123,3 @@ REST_FRAMEWORK = {
     )
    
 }
->>>>>>> 11b2a857f06141ac901b9a929bbaa8ffb0107c7b
