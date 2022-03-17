@@ -1,4 +1,7 @@
 from django.shortcuts import get_object_or_404
+from rest_framework import filters, permissions, viewsets
+from rest_framework.pagination import LimitOffsetPagination
+from titles.models import Category, Genre, Title
 from rest_framework import viewsets
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
@@ -8,6 +11,7 @@ from .permissions import (AdminModeratorAuthorPermission,)
 #from .permissions import 
 from .serializers import (CategorySerializer, GenreSerializer, CommentSerializer, ReviewSerializer,
                           TitleReadSerializer, TitleWhiteSerializer)
+
 
 
 class TitleViewSet(viewsets.ModelViewSet):
