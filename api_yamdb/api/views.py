@@ -1,38 +1,17 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import LimitOffsetPagination
 from reviews.models import Review
-<<<<<<< HEAD
 from titles.models import Category, Genre, Title
 
-from .permissions import AdminModeratorAuthorPermission
-from .serializers import (
-    CategorySerializer,
-    CommentSerializer,
-    GenreSerializer,
-    ReviewSerializer,
-    TitleReadSerializer,
-    TitleWhiteSerializer,
-)
-=======
 from .permissions import (AdminModeratorAuthorPermission, AdminOrReadOnly)
 from .serializers import (CategorySerializer, GenreSerializer,
                           CommentSerializer, ReviewSerializer,
                           TitleReadSerializer, TitleWriteSerializer)
->>>>>>> categories
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-<<<<<<< HEAD
-    # permission_classes = админ на запись, остальные чтение
-    pagination_class = LimitOffsetPagination
-
-    def get_serializer_class(self):
-        # Если запрошенное действие (action) — получение списка объектов
-        # 'retrieve' - получение одного объекта
-        if self.action == "list" or self.action == "retrieve":
-=======
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
@@ -43,7 +22,6 @@ class TitleViewSet(viewsets.ModelViewSet):
         # Если запрошенное действие (action) — получение списка объектов
         # ('list') или получение одного объекта 'retrieve'
         if self.action == ('list', 'retrieve'):
->>>>>>> categories
             # ...то применяем TitleReadSerializer
             return TitleReadSerializer
         # А если запрошенное действие — не 'list', 'retrieve'
@@ -64,15 +42,11 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-<<<<<<< HEAD
-    # permission_classes = админ на запись, остальные чтение
-=======
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
->>>>>>> categories
 
 
 class CommentViewSet(viewsets.ModelViewSet):
