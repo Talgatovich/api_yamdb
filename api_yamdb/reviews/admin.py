@@ -1,0 +1,30 @@
+from django.contrib import admin
+
+from .models import Comment, Review
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    """Отзывовы в админке"""
+    list_display = (
+        'title',
+        'text',
+        'author',
+        'score',
+    )
+    search_fields = ('pub_date',)
+    list_filter = ('pub_date',)
+    empty_value_display = '-пусто-'
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    """Комментарии в админке"""
+    list_display = (
+        'review',
+        'text',
+        'author',
+        'pub_date',
+    )
+    search_fields = ('review',)
+    list_filter = ('review',)
+    empty_value_display = '-пусто-'

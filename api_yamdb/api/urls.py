@@ -4,12 +4,24 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
-from .views import CategoryViewSet, GenreViewSet, TitleViewSet
+from .views import CategoryViewSet, GenreViewSet, TitleViewSet, CommentViewSet, ReviewViewSet
+
+app_name = 'api'
 
 router = DefaultRouter()
 router.register('titles', TitleViewSet)
 router.register('genres', GenreViewSet)
 router.register('categories', CategoryViewSet)
+router.register(
+    r'titles/(?P<title_id>\d+)/reviews',
+    ReviewViewSet,
+    basename='reviews'
+)
+router.register(
+    r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
+    CommentViewSet,
+    basename='comments'
+)
 #router.register(
 #    r"^titles\/(?P<id>\d+)\/reviews", ReviewViewSet, basename="reviews"
 #)
