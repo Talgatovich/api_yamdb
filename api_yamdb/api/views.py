@@ -1,18 +1,48 @@
+from api_yamdb import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, permissions, viewsets
+from rest_framework import filters, permissions, status, viewsets
+from rest_framework.decorators import action, api_view
 from rest_framework.pagination import LimitOffsetPagination
-from titles.models import Category, Genre, Title
-from rest_framework import viewsets
-from rest_framework import filters, permissions, viewsets
-from rest_framework.pagination import LimitOffsetPagination
-from titles.models import Category, Genre, Title
+from rest_framework.response import Response
 from reviews.models import Review
-from .permissions import (AdminModeratorAuthorPermission,)
-#from .permissions import 
-from .serializers import (CategorySerializer, GenreSerializer, CommentSerializer, ReviewSerializer,
-                          TitleReadSerializer, TitleWhiteSerializer)
+from titles.models import Category, Genre, Title
+from users.models import User
+
+from .my_functions import random_code
+from .permissions import AdminModeratorAuthorPermission
+from .serializers import (CategorySerializer, CommentSerializer,
+                          EmailSerializer, GenreSerializer, ReviewSerializer,
+                          TitleReadSerializer, TitleWhiteSerializer,
+                          UserSerializer)
 
 
+@api_view(['POST'])
+def get_confirmation_code(request):
+    serializer = EmailSerializer(data=request.data)
+
+    serializer.is_valid()
+    username = request.data.get('username')
+    print("ЭТО ЮЗЕРНЕЙМ",username)
+    print("ЭТО ДАТА",request.data)
+    print("ЭТО ВАЛИДАТЕД ДАТА",serializer.validated_data)
+    email = serializer.validated_data.get('email')
+    user = User.objects.get_or_create(username=username, email=email)    
+    confirmation_code = random_code()
+
+    mail_subject = 'Код подтверждения'
+    message = f'Ваш {mail_subject}: {confirmation_code}'
+    sender = 'Vasya Pupkin'
+    adress = [email]
+
+    send_mail(
+        mail_subject,
+        message,
+        sender,
+        adress
+    )
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
