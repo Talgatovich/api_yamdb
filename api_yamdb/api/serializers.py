@@ -3,22 +3,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from reviews.models import Comment, Review
 from titles.models import Category, Genre, Title
-from users.models import User
-
-
-class UserSerializer(serializers.ModelSerializer):    
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username', 'bio', 'email')
-
-class EmailSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    username = serializers.StringRelatedField(read_only=True)
-
-
-class ConfirmationCodeSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    confirmation_code = serializers.CharField(required=True)
 
 
 class CategorySerializer(serializers.ModelSerializer):
