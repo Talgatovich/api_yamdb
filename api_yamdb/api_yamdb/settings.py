@@ -26,9 +26,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
-    #'titles.apps.TitlesCatGenConfig',
     'titles',
-    'reviews',    
+    'reviews',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -116,12 +116,13 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 AUTH_USER_MODEL = 'users.User' 
 
 REST_FRAMEWORK = {
-    
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-   
+    ],
 }
 SIMPLE_JWT = {
     # Устанавливаем срок жизни токена

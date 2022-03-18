@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+import datetime as dt
+from rest_framework import serializers
+
+>>>>>>> categories
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -25,6 +31,7 @@ class TitleReadSerializer(serializers.ModelSerializer):
         read_only=True,
         many=True
     )
+    rating = serializers.IntegerField(read_only=True, required=False)
 
     class Meta:
         model = Title
@@ -46,10 +53,16 @@ class TitleWriteSerializer(serializers.ModelSerializer):
         model = Title
         fields = '__all__'
 
+    def validate_year(self, value):
+        year = dt.date.today().year
+        if not (year - 2000000 < value <= year):
+            raise serializers.ValidationError('Проверьте год произведения!')
+        return value
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериалайзер отзывов"""
-    
+
     title = serializers.SlugRelatedField(
         slug_field='name',
         read_only=True
