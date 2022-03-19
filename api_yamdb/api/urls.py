@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from users.views import AuthToken, get_confirmation_code
+from users.views import AuthToken, UserViewSet, get_confirmation_code
 
 from .views import (
     CategoryViewSet,
@@ -22,6 +22,7 @@ router.register(
     CommentViewSet,
     basename="comments",
 )
+router.register("users", UserViewSet)
 
 urlpatterns = [
     path("v1/", include(router.urls)),
