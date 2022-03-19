@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, filters, permissions
+from django.db.models import Avg
+from rest_framework import viewsets, filters, mixins
 from rest_framework.pagination import LimitOffsetPagination
 from reviews.models import Review
 from titles.models import Category, Genre, Title
@@ -11,39 +12,40 @@ from .serializers import (CategorySerializer, GenreSerializer,
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          AdminOrReadOnly]
+    queryset = Title.objects.all().annotate(rating=Avg("reviews__score"))
+    permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'year', 'genre', 'category']
 
     def get_serializer_class(self):
-        # Если запрошенное действие (action) — получение списка объектов
-        # ('list') или получение одного объекта 'retrieve'
-        if self.action == ('list', 'retrieve'):
-            # ...то применяем TitleReadSerializer
-            return TitleReadSerializer
-        # А если запрошенное действие — не 'list', 'retrieve'
-        # применяем TitleWriteSerializer
-        return TitleWriteSerializer
+        if self.request.method in ['POST', 'PATCH', 'DELETE']:
+            return TitleWriteSerializer
+        return TitleReadSerializer
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class ForCategoryAndGenre(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    pass
+
+
+class CategoryViewSet(ForCategoryAndGenre):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
 
 
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(ForCategoryAndGenre):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
