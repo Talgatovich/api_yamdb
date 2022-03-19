@@ -16,7 +16,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'year', 'genre', 'category']
+    search_fields = ["name", "year", "genre", "category"]
 
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PATCH', 'DELETE']:
@@ -39,7 +39,7 @@ class CategoryViewSet(ForCategoryAndGenre):
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', ]
+    search_fields = ["name",]
 
 
 class GenreViewSet(ForCategoryAndGenre):
