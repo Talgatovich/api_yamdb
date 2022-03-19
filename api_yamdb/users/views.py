@@ -1,10 +1,11 @@
 from api.my_functions import random_code
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import permissions, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import User
@@ -12,9 +13,9 @@ from .serializers import ConfirmationCodeSerializer, EmailSerializer
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def get_confirmation_code(request):
     serializer = EmailSerializer(data=request.data)
-
     if serializer.is_valid():
         username = serializer.validated_data.get("username")
         email = serializer.validated_data.get("email")
@@ -37,6 +38,7 @@ def get_confirmation_code(request):
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = ConfirmationCodeSerializer(data=request.data)
+        permission_classes = (permissions.AllowAny,)
         if serializer.is_valid():
             username = serializer.validated_data["username"]
             code = serializer.validated_data.get("confirmation_code")
