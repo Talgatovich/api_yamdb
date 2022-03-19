@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from users.views import CustomAuthToken, get_confirmation_code
+from users.views import AuthToken, get_confirmation_code
 
 from .views import (
     CategoryViewSet,
@@ -26,5 +26,5 @@ router.register(
 urlpatterns = [
     path("v1/", include(router.urls)),
     path("v1/auth/signup/", get_confirmation_code),
-    path("v1/auth/token/", CustomAuthToken.as_view()),
+    path("v1/auth/token/", AuthToken),
 ]
