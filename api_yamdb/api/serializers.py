@@ -26,7 +26,8 @@ class TitleReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = "__all__"
+        fields = ("id", "name", "year", "description", "genre",
+                  "category", "rating")
 
 
 class TitleWriteSerializer(serializers.ModelSerializer):
@@ -39,7 +40,8 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = "__all__"
+        fields = ("id", "name", "year", "description", "genre",
+                  "category", "rating")
 
     def validate_year(self, value):
         year = dt.date.today().year

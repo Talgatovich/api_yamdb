@@ -36,16 +36,16 @@ class ForCategoryAndGenre(
 class CategoryViewSet(ForCategoryAndGenre):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly, ]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ["name",]
+    search_fields = ["name", ]
 
 
 class GenreViewSet(ForCategoryAndGenre):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly, ]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
