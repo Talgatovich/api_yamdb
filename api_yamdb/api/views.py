@@ -1,14 +1,19 @@
-from django.shortcuts import get_object_or_404
 from django.db.models import Avg
-from rest_framework import viewsets, filters, mixins
+from django.shortcuts import get_object_or_404
+from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from reviews.models import Review
 from titles.models import Category, Genre, Title
 
-from .permissions import (AdminModeratorAuthorPermission, AdminOrReadOnly)
-from .serializers import (CategorySerializer, GenreSerializer,
-                          CommentSerializer, ReviewSerializer,
-                          TitleReadSerializer, TitleWriteSerializer)
+from .permissions import AdminModeratorAuthorPermission, AdminOrReadOnly
+from .serializers import (
+    CategorySerializer,
+    CommentSerializer,
+    GenreSerializer,
+    ReviewSerializer,
+    TitleReadSerializer,
+    TitleWriteSerializer,
+)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -19,7 +24,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "year", "genre", "category"]
 
     def get_serializer_class(self):
-        if self.request.method in ['POST', 'PATCH', 'DELETE']:
+        if self.request.method in ["POST", "PATCH", "DELETE"]:
             return TitleWriteSerializer
         return TitleReadSerializer
 
@@ -39,7 +44,10 @@ class CategoryViewSet(ForCategoryAndGenre):
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ["name",]
+    search_fields = [
+        "name",
+    ]
+    lookup_field = "slug"
 
 
 class GenreViewSet(ForCategoryAndGenre):
@@ -48,7 +56,10 @@ class GenreViewSet(ForCategoryAndGenre):
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', ]
+    search_fields = [
+        "name",
+    ]
+    lookup_field = "slug"
 
 
 class CommentViewSet(viewsets.ModelViewSet):

@@ -10,13 +10,19 @@ from titles.models import Category, Genre, Title
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ("name", "slug", )
+        fields = (
+            "name",
+            "slug",
+        )
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = ("name", "slug", )
+        fields = (
+            "name",
+            "slug",
+        )
 
 
 class TitleReadSerializer(serializers.ModelSerializer):

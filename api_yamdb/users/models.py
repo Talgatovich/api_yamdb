@@ -15,3 +15,9 @@ class User(AbstractUser):
         constraints = [
             UniqueConstraint(fields=["username", "email"], name="unique_user")
         ]
+
+    def is_admin(self):
+        return self.role == "admin" or self.is_staff
+
+    def is_moderator(self):
+        return self.role == "moderator"
