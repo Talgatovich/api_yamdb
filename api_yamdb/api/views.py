@@ -2,9 +2,12 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from django_filters.rest_framework import DjangoFilterBackend
+
+
 from reviews.models import Review
 from titles.models import Category, Genre, Title
-
+from .filters import TitleFilter
 from .permissions import AdminModeratorAuthorPermission, AdminOrReadOnly
 from .serializers import (
     CategorySerializer,
@@ -17,16 +20,19 @@ from .serializers import (
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().annotate(Avg("reviews__score"))
-    permission_classes = [AdminOrReadOnly]
+    queryset = Title.objects.annotate(Avg("reviews__score"))
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["name", "year", "genre", "category"]
+    serializer_class = TitleWriteSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.request.method in ["POST", "PATCH", "DELETE"]:
             return TitleWriteSerializer
         return TitleReadSerializer
+
 
 class ForCategoryAndGenre(
     mixins.CreateModelMixin,
@@ -40,7 +46,8 @@ class ForCategoryAndGenre(
 class CategoryViewSet(ForCategoryAndGenre):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AdminOrReadOnly, ]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = [
@@ -52,7 +59,8 @@ class CategoryViewSet(ForCategoryAndGenre):
 class GenreViewSet(ForCategoryAndGenre):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [AdminOrReadOnly, ]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = [
