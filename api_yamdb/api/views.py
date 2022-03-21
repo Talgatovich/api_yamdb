@@ -24,9 +24,9 @@ class TitleViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "year", "genre", "category"]
 
     def get_serializer_class(self):
-        if self.request.method == "GET":
-            return TitleReadSerializer
-        return TitleWriteSerializer
+        if self.request.method in ["POST", "PATCH", "DELETE"]:
+            return TitleWriteSerializer
+        return TitleReadSerializer
 
 class ForCategoryAndGenre(
     mixins.CreateModelMixin,
