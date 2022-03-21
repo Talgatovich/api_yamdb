@@ -17,7 +17,7 @@ from .serializers import (
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().annotate(rating=Avg("reviews__score"))
+    queryset = Title.objects.all().annotate(Avg("reviews__score"))
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
@@ -27,7 +27,6 @@ class TitleViewSet(viewsets.ModelViewSet):
         if self.request.method in ["POST", "PATCH", "DELETE"]:
             return TitleWriteSerializer
         return TitleReadSerializer
-
 
 class ForCategoryAndGenre(
     mixins.CreateModelMixin,
@@ -41,7 +40,7 @@ class ForCategoryAndGenre(
 class CategoryViewSet(ForCategoryAndGenre):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly, ]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = [
@@ -53,7 +52,7 @@ class CategoryViewSet(ForCategoryAndGenre):
 class GenreViewSet(ForCategoryAndGenre):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [AdminOrReadOnly, ]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = [
