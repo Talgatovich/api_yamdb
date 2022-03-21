@@ -31,10 +31,7 @@ class Title(models.Model):
     genre = models.ManyToManyField(Genre, related_name='titles')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL,
                                  blank=True, null=True, related_name='titles')
-    #rating = models.IntegerField(
-    #    validators=[MinValueValidator(1), MaxValueValidator(10)],
-    #    default=None
-    #)
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

@@ -17,7 +17,7 @@ from .serializers import (
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().annotate(rating=Avg("reviews__score"))
+    queryset = Title.objects.all().annotate(Avg("reviews__score"))
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
