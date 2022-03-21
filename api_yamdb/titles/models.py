@@ -27,13 +27,14 @@ class Title(models.Model):
         validators=[MinValueValidator(-2000000), MaxValueValidator(int(year))],
         default=None
     )
-    description = models.TextField(blank=True, null=True)
-    genre = models.ManyToManyField(Genre, related_name='titles', blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    genre = models.ManyToManyField(Genre, related_name='titles')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL,
                                  blank=True, null=True, related_name='titles')
-    raiting = models.IntegerField(
-        default=None
-    )
+    #rating = models.IntegerField(
+    #    validators=[MinValueValidator(1), MaxValueValidator(10)],
+    #    default=None
+    #)
 
     def __str__(self):
         return self.name

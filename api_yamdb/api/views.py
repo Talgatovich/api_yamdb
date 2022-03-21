@@ -28,7 +28,6 @@ class TitleViewSet(viewsets.ModelViewSet):
             return TitleReadSerializer
         return TitleWriteSerializer
 
-
 class ForCategoryAndGenre(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
