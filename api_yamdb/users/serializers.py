@@ -45,8 +45,8 @@ class EmailSerializer(serializers.Serializer):
             send_mail(mail_subject, message, sender, [email])
             raise serializers.ValidationError(
                 (
-                    "Этот пользователь уже существует.Обновленный код отправлен"
-                    "на e-mail"
+                    "Этот пользователь уже существует.Обновленный код"
+                    " отправлен на e-mail"
                 )
             )
         return data
