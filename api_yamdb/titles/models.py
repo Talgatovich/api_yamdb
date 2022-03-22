@@ -1,11 +1,13 @@
-from django.db import models
 import datetime as dt
 
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.db import models
 
 year = dt.date.today().year
+
+
 class Category(models.Model):
+    """Модель категорий произведений."""
     name = models.CharField(max_length=256, unique=True)
     slug = models.SlugField(max_length=50, unique=True)
 
@@ -14,6 +16,7 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
+    """Модель жанра произведений."""
     name = models.CharField(max_length=256, unique=True)
     slug = models.SlugField(max_length=50, unique=True)
 
@@ -22,6 +25,7 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
+    """Модель произведений."""
     name = models.CharField(max_length=256)
     year = models.IntegerField(
         validators=[MinValueValidator(-2000000), MaxValueValidator(int(year))],

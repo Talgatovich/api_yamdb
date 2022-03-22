@@ -1,7 +1,6 @@
 from api.my_functions import random_code
 from django.core.mail import send_mail
 from rest_framework import serializers
-
 from users.models import User
 
 
@@ -30,7 +29,7 @@ class EmailSerializer(serializers.Serializer):
         """
         Проверка существования юзера с переданными в запросе e-mail и username.
         Если юзер есть в БД, отправляем новый код на его e-mail и обновляем
-        код в самом объекте юзера
+        код в самом объекте юзера.
 
         """
         username = data.get("username")
@@ -45,8 +44,8 @@ class EmailSerializer(serializers.Serializer):
             send_mail(mail_subject, message, sender, [email])
             raise serializers.ValidationError(
                 (
-                    "Этот пользователь уже существует.Обновленный код отправлен"
-                    "на e-mail"
+                    "Этот пользователь уже существует."
+                    "Обновленный код отправлен на e-mail"
                 )
             )
         return data

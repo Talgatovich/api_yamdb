@@ -4,6 +4,7 @@ from titles.models import Title
 
 
 class TitleFilter(filters.FilterSet):
+    """Кастомный класс фильтров."""
 
     genre = filters.CharFilter(field_name='genre__slug',)
     category = filters.CharFilter(field_name='category__slug',)
