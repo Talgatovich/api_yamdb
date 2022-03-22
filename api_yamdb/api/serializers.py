@@ -26,20 +26,30 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleReadSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True,)
+    category = CategorySerializer(
+        read_only=True,
+    )
     genre = GenreSerializer(read_only=True, many=True)
     rating = serializers.IntegerField(read_only=True, default=0)
 
     class Meta:
         model = Title
-        fields = ("id", "name", "year", "description", "genre",
-                  "category", "rating")
+        fields = (
+            "id",
+            "name",
+            "year",
+            "description",
+            "genre",
+            "category",
+            "rating",
+        )
         read_only_fields = fields
 
 
 class TitleWriteSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
-        queryset=Category.objects.all(), slug_field="slug",
+        queryset=Category.objects.all(),
+        slug_field="slug",
     )
     genre = serializers.SlugRelatedField(
         queryset=Genre.objects.all(), slug_field="slug", many=True
@@ -48,8 +58,15 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ("id", "name", "year", "description", "genre",
-                  "category", "rating")
+        fields = (
+            "id",
+            "name",
+            "year",
+            "description",
+            "genre",
+            "category",
+            "rating",
+        )
 
     def validate_year(self, value):
         year = dt.date.today().year
