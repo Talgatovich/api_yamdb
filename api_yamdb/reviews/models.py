@@ -1,11 +1,12 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from titles.models import Title
 from users.models import User
 
 
 class Review(models.Model):
-    """Модель отзыва"""
+    """Модель отзыва."""
 
     title = models.ForeignKey(
         Title,
@@ -48,7 +49,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    """Модель комментария"""
+    """Модель комментария."""
 
     review = models.ForeignKey(
         Review,

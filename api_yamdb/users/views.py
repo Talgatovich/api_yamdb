@@ -1,5 +1,3 @@
-from api.my_functions import random_code
-from api.permissions import IsAdminOrUserReadOnly
 from django.core.mail import send_mail
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -8,12 +6,10 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import User
-from .serializers import (
-    ConfirmationCodeSerializer,
-    EmailSerializer,
-    MeSerializer,
-    UserSerializer,
-)
+from .serializers import (ConfirmationCodeSerializer, EmailSerializer,
+                          MeSerializer, UserSerializer)
+from api.my_functions import random_code
+from api.permissions import IsAdminOrUserReadOnly
 
 
 @api_view(["POST"])

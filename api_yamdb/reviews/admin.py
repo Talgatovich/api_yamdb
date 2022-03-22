@@ -18,6 +18,7 @@ class ReviewAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     """Комментарии в админке"""
