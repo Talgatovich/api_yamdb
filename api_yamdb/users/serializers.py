@@ -1,7 +1,6 @@
-from rest_framework import serializers, status
-from rest_framework.response import Response
-from rest_framework.validators import UniqueTogetherValidator
-
+from api.my_functions import random_code
+from django.core.mail import send_mail
+from rest_framework import serializers
 from users.models import User
 
 
@@ -25,13 +24,31 @@ class EmailSerializer(serializers.Serializer):
     class Meta:
         model = User
         fields = ("username", "email")
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=("username", "email"),
-                message="Введенный username или e-mail уже существуют",
+
+    def validate(self, data):
+        """
+        Проверка существования юзера с переданными в запросе e-mail и username.
+        Если юзер есть в БД, отправляем новый код на его e-mail и обновляем
+        код в самом объекте юзера.
+
+        """
+        username = data.get("username")
+        email = data.get("email")
+        confirmation_code = random_code()
+        user = User.objects.filter(username=username, email=email)
+        sender = "Vasya"
+        message = f"Ваш новый код : {confirmation_code}"
+        mail_subject = "confirmation_code"
+        if user:
+            user.update(confirmation_code=confirmation_code)
+            send_mail(mail_subject, message, sender, [email])
+            raise serializers.ValidationError(
+                (
+                    "Этот пользователь уже существует."
+                    "Обновленный код отправлен на e-mail"
+                )
             )
-        ]
+        return data
 
     def validate_username(self, value):
         if value == "me":
