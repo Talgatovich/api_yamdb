@@ -34,33 +34,24 @@ class ForCategoryAndGenre(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    pass
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          AdminOrReadOnly]
+    pagination_class = LimitOffsetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        "name",
+    ]
+    lookup_field = "slug"
 
 
 class CategoryViewSet(ForCategoryAndGenre):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          AdminOrReadOnly]
-    pagination_class = LimitOffsetPagination
-    filter_backends = [filters.SearchFilter]
-    search_fields = [
-        "name",
-    ]
-    lookup_field = "slug"
 
 
 class GenreViewSet(ForCategoryAndGenre):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          AdminOrReadOnly]
-    pagination_class = LimitOffsetPagination
-    filter_backends = [filters.SearchFilter]
-    search_fields = [
-        "name",
-    ]
-    lookup_field = "slug"
 
 
 class CommentViewSet(viewsets.ModelViewSet):

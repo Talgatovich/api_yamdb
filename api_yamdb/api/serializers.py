@@ -74,7 +74,7 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 
     def validate_year(self, value):
         year = dt.date.today().year
-        if not (year - 2000000 < value <= year):
+        if not (0 < value <= year):
             raise serializers.ValidationError("Проверьте год произведения!")
         return value
 
