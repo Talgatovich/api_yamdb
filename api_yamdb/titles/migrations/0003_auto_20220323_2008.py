@@ -7,33 +7,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('titles', '0002_auto_20220321_1945'),
+        ("titles", "0002_title_genre"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='category',
-            name='slug',
-            field=models.SlugField(unique=True, validators=[django.core.validators.RegexValidator(message='Error invalid slug', regex='^[-a-zA-Z0-9_]+$')]),
+            model_name="category",
+            name="slug",
+            field=models.SlugField(
+                unique=True,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Error invalid slug", regex="^[-a-zA-Z0-9_]+$"
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='genre',
-            name='slug',
-            field=models.SlugField(unique=True, validators=[django.core.validators.RegexValidator(message='Error invalid slug', regex='^[-a-zA-Z0-9_]+$')]),
+            model_name="genre",
+            name="slug",
+            field=models.SlugField(
+                unique=True,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Error invalid slug", regex="^[-a-zA-Z0-9_]+$"
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='title',
-            name='description',
+            model_name="title",
+            name="description",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='title',
-            name='name',
+            model_name="title",
+            name="name",
             field=models.TextField(),
         ),
         migrations.AlterField(
-            model_name='title',
-            name='year',
-            field=models.IntegerField(default=None, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(2022)]),
+            model_name="title",
+            name="year",
+            field=models.IntegerField(
+                default=None,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(2022),
+                ],
+            ),
         ),
     ]
