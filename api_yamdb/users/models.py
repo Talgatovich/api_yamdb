@@ -11,6 +11,7 @@ class User(AbstractUser):
     confirmation_code = models.CharField(max_length=60, blank=True)
     role = models.CharField(max_length=25, choices=CHOISES, default="user")
 
+
     class Meta:
         constraints = [
             UniqueConstraint(fields=["username", "email"], name="unique_user")

@@ -14,7 +14,7 @@ class Review(models.Model):
         related_name="reviews",
         verbose_name="произведение",
     )
-    text = models.CharField(max_length=200)
+    text = models.TextField()
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -57,7 +57,7 @@ class Comment(models.Model):
         related_name="comments",
         verbose_name="отзыв",
     )
-    text = models.CharField("текст комментария", max_length=200)
+    text = models.TextField()
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
