@@ -4,12 +4,14 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from reviews.models import Comment, Review
-from titles.models import Category, Genre, Title
+from reviews.models import Comment, Review  # isort:skip
+from titles.models import Category, Genre, Title  # isort:skip
+from users.models import User  # isort:skip
 
 
 class CategorySerializer(serializers.ModelSerializer):
     """Сериалайзер категорий."""
+
     class Meta:
         model = Category
         fields = (
@@ -20,6 +22,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class GenreSerializer(serializers.ModelSerializer):
     """Сериалайзер жанров."""
+
     class Meta:
         model = Genre
         fields = (
@@ -30,7 +33,10 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class TitleReadSerializer(serializers.ModelSerializer):
     """Сериалайзер произведений для чтения."""
-    category = CategorySerializer(read_only=True,)
+
+    category = CategorySerializer(
+        read_only=True,
+    )
     genre = GenreSerializer(read_only=True, many=True)
     rating = serializers.IntegerField(
         source="reviews__score__avg", read_only=True
@@ -52,6 +58,7 @@ class TitleReadSerializer(serializers.ModelSerializer):
 
 class TitleWriteSerializer(serializers.ModelSerializer):
     """Сериалайзер произведений для записи."""
+
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field="slug",
@@ -74,7 +81,7 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 
     def validate_year(self, value):
         year = dt.date.today().year
-        if not (year - 2000000 < value <= year):
+        if not (0 < value <= year):
             raise serializers.ValidationError("Проверьте год произведения!")
         return value
 
@@ -122,3 +129,58 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = 'pub_date',
         model = Comment
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Сериалайзер юзера"""
+
+    class Meta:
+        model = User
+        fields = (
+            "first_name",
+            "last_name",
+            "username",
+            "bio",
+            "email",
+            "role",
+        )
+
+
+class EmailSerializer(serializers.Serializer):
+    """Сериалайзер отправки кода подтверждения"""
+
+    email = serializers.EmailField(required=True)
+    username = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email")
+
+    def validate_username(self, value):
+        if value == "me":
+            raise serializers.ValidationError("Используйте другой username")
+        return value
+
+
+class ConfirmationCodeSerializer(serializers.Serializer):
+    """Сериалайзер проверки кода подтверждения и генерации токена"""
+
+    username = serializers.CharField(required=True)
+    confirmation_code = serializers.CharField(required=True)
+
+
+class MeSerializer(serializers.ModelSerializer):
+    """Сериалайзер получения профиля юзера"""
+
+    role = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "first_name",
+            "last_name",
+            "username",
+            "bio",
+            "email",
+            "role",
+        )

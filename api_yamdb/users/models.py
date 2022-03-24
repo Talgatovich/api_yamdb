@@ -1,24 +1,33 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import UniqueConstraint
 
-CHOISES = [("user", "User"), ("moderator", "Moderator"), ("admin", "Admin")]
+from .utils import find_length
+
+
+class UserRole:
+    USER = "user"
+    MODERATOR = "moderator"
+    ADMIN = "admin"
+
+    ROLES = [("user", "User"), ("moderator", "Moderator"), ("admin", "Admin")]
 
 
 class User(AbstractUser):
-    email = models.EmailField("email address", unique=True)
-    bio = models.TextField(max_length=300, blank=True)
+    username = models.TextField(max_length=150, unique=True)
+    first_name = models.TextField(max_length=150, blank=True)
+    email = models.EmailField("email address", unique=True, max_length=254)
+    bio = models.TextField(blank=True)
     confirmation_code = models.CharField(max_length=60, blank=True)
-    role = models.CharField(max_length=25, choices=CHOISES, default="user")
+    role = models.CharField(
+        max_length=find_length(UserRole.ROLES),
+        choices=UserRole.ROLES,
+        default=UserRole.USER,
+    )
 
-
-    class Meta:
-        constraints = [
-            UniqueConstraint(fields=["username", "email"], name="unique_user")
-        ]
-
+    @property
     def is_admin(self):
-        return self.role == "admin" or self.is_staff
+        return self.role == UserRole.ADMIN or self.is_staff
 
+    @property
     def is_moderator(self):
-        return self.role == "moderator"
+        return self.role == UserRole.MODERATOR
