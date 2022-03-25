@@ -3,7 +3,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -19,11 +18,18 @@ from api.permissions import IsAdminOrUserReadOnly
 
 from .filters import TitleFilter
 from .permissions import AdminModeratorAuthorPermission, AdminOrReadOnly
-from .serializers import (CategorySerializer, CommentSerializer,
-                          ConfirmationCodeSerializer, EmailSerializer,
-                          GenreSerializer, MeSerializer, ReviewSerializer,
-                          TitleReadSerializer, TitleWriteSerializer,
-                          UserSerializer)
+from .serializers import (
+    CategorySerializer,
+    CommentSerializer,
+    ConfirmationCodeSerializer,
+    EmailSerializer,
+    GenreSerializer,
+    MeSerializer,
+    ReviewSerializer,
+    TitleReadSerializer,
+    TitleWriteSerializer,
+    UserSerializer,
+)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -76,13 +82,19 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (AdminModeratorAuthorPermission,)
 
     def get_queryset(self):
-        review = get_object_or_404(Review, id=self.kwargs.get("review_id"),
-                 title=self.kwargs.get('title_id'))
+        review = get_object_or_404(
+            Review,
+            id=self.kwargs.get("review_id"),
+            title=self.kwargs.get("title_id"),
+        )
         return review.comments.all()
 
     def perform_create(self, serializer):
-        review = get_object_or_404(Review, id=self.kwargs.get("review_id"),
-                 title=self.kwargs.get('title_id'))
+        review = get_object_or_404(
+            Review,
+            id=self.kwargs.get("review_id"),
+            title=self.kwargs.get("title_id"),
+        )
         serializer.save(author=self.request.user, review=review)
 
 

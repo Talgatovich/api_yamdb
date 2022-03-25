@@ -96,7 +96,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = "__all__"
-        read_only_fields = 'pub_date',
+        read_only_fields = ("pub_date",)
         model = Review
 
     def validate_score(self, value):
@@ -127,7 +127,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = "__all__"
-        read_only_fields = 'pub_date',
+        read_only_fields = ("pub_date",)
         model = Comment
 
 

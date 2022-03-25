@@ -1,4 +1,0 @@
-#!/bin/bash
-# This is a comment
-./sqlite3.exe  #.read 'f:/Dev/api_yamdb/api_yamdb/for_script'
-#Enter
