@@ -1,7 +1,0 @@
-id,password,last_login,is_superuser,username,first_name,last_name,is_staff,is_active,date_joined,email,bio,confirmation_code,role
-1,pbkdf2_sha256$150000$Fme0sgON1SeC$axh6F+yBcJHoHyp+SHoQBJN6BZXGMPOrUbWhTvC7pE8=,2022-03-18 07:12:05.946215,1,admin1,,,1,1,2022-03-18 07:11:51.590193,admin@adminmail.com,,aHCFhuqFGHHujabh,admin
-2,,,0,user,,,0,1,2022-03-18 12:33:30.882050,user@usermail.com,,khuOhuyFHhHFCHbD,user
-7,user,,0,d,,,0,1,2022-03-19 08:50:31,d@usermail.com,,UUFFDCFAUqUhbCUA,user
-11,user,,0,c,,,0,1,2022-03-20 13:23:53,c@usermail.com,,ONUHHUtDkDCaUhDU,moderator
-12,,,0,fromadmin,,,0,1,2022-03-20 14:08:06.488969,fromadmin@example.cl,,,admin
-14,pbkdf2_sha256$150000$H7mcgP5ZhZRF$iS7WzhUJiCYDMC6PWwwTDUysWfszW6d/yFMp7ws8mi4=,,1,super,,,1,1,2022-03-21 05:41:49.449895,super@adminmail.com,,UuhJuGJetHuDFNwU,user

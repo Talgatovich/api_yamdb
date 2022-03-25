@@ -1,4 +1,4 @@
-.open db.sqlite3 
+.open f:/Dev/api_yamdb/api_yamdb/db.sqlite3 
 .mode csv
 .separator , 
 .import --skip 1 category.csv titles_category 

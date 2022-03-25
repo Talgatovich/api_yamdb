@@ -10,19 +10,14 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-from reviews.models import Review
-from titles.models import Category, Genre, Title
-from users.models import User
-
-from api.permissions import IsAdminOrUserReadOnly
 
 from .filters import TitleFilter
 from .permissions import AdminModeratorAuthorPermission, AdminOrReadOnly
 from .serializers import (
+    AuthenticationSerializer,
     CategorySerializer,
     CommentSerializer,
     ConfirmationCodeSerializer,
-    EmailSerializer,
     GenreSerializer,
     MeSerializer,
     ReviewSerializer,
@@ -30,6 +25,11 @@ from .serializers import (
     TitleWriteSerializer,
     UserSerializer,
 )
+
+from api.permissions import IsAdminOrUserReadOnly  # isort:skip
+from reviews.models import Review  # isort:skip
+from titles.models import Category, Genre, Title  # isort:skip
+from users.models import User  # isort:skip
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -114,7 +114,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def get_confirmation_code(request):
-    serializer = EmailSerializer(data=request.data)
+    serializer = AuthenticationSerializer(data=request.data)
 
     serializer.is_valid(raise_exception=True)
     username = serializer.validated_data.get("username")
@@ -123,19 +123,18 @@ def get_confirmation_code(request):
     sender = settings.DEFAULT_EMAIL_SENDER
     adress = [email]
 
-    check_email = User.objects.filter(email=email)
-    check_username = User.objects.filter(username=username)
+    check_email = User.objects.filter(email=email).exists()
+    check_username = User.objects.filter(username=username).exists()
     if (check_username and not check_email) or (
         not check_username and check_email
     ):
-        text = {"error": "username or email has already been created"}
+        text = {"Ошибка": "username или email уже существуют"}
         return Response(text, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        user = User.objects.get_or_create(username=username, email=email)
-        confirmation_code = default_token_generator.make_token(user[0])
-        message = f"Ваш {mail_subject}: {confirmation_code}"
-        send_mail(mail_subject, message, sender, adress)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    user = User.objects.get_or_create(username=username, email=email)
+    confirmation_code = default_token_generator.make_token(user[0])
+    message = f"Ваш {mail_subject}: {confirmation_code}"
+    send_mail(mail_subject, message, sender, adress)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
@@ -176,9 +175,9 @@ class UserViewSet(viewsets.ModelViewSet):
     )
     def me(self, request):
         user = self.request.user
-        serializer = MeSerializer(user)
-        if self.request.method == "PATCH":
-            serializer = MeSerializer(user, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+        serializer = MeSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        if self.request.method != "PATCH":
+            serializer = MeSerializer(user)
         return Response(serializer.data)
