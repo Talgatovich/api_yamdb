@@ -49,7 +49,7 @@ class TitleViewSet(viewsets.ModelViewSet):
         return TitleReadSerializer
 
 
-class ForCategoryAndGenre(
+class CDLViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
@@ -67,12 +67,12 @@ class ForCategoryAndGenre(
     lookup_field = "slug"
 
 
-class CategoryViewSet(ForCategoryAndGenre):
+class CategoryViewSet(CDLViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
-class GenreViewSet(ForCategoryAndGenre):
+class GenreViewSet(CDLViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
 
@@ -122,15 +122,10 @@ def get_confirmation_code(request):
     mail_subject = f"Код подтверждения для {username}"
     sender = settings.DEFAULT_EMAIL_SENDER
     adress = [email]
-
-    check_email = User.objects.filter(email=email).exists()
-    check_username = User.objects.filter(username=username).exists()
-    if (check_username and not check_email) or (
-        not check_username and check_email
-    ):
-        text = {"Ошибка": "username или email уже существуют"}
-        return Response(text, status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get_or_create(username=username, email=email)
+    try:
+        user = User.objects.get_or_create(username=username, email=email)
+    except Exception:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     confirmation_code = default_token_generator.make_token(user[0])
     message = f"Ваш {mail_subject}: {confirmation_code}"
     send_mail(mail_subject, message, sender, adress)
