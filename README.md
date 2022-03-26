@@ -40,16 +40,16 @@ python3 manage.py migrate (python manage.py migrate)
 
 #### Для заполнения базы
 
-Запустить скрипт "csv_to_sql_script"
+Запустить скрипт "csv_to_sql_script.sh"
 
 ```
-./csv_to_sql_script
+./csv_to_sql_script.sh
 ```
 
 Ввести в консоль
 
 ```
-.read commands
+.read commands.sh
 ```
 
 #### Запустить проект
